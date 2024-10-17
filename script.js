@@ -1,8 +1,10 @@
 const addButton = document.querySelector('#addButton');
 const taskList = document.querySelector('.tasks');
 const task = document.querySelector('#task');
+const clearHistoryButton = document.querySelector('#clearHistory');
 
-addButton.addEventListener('click',(e) => {
+
+function addTask() {
     const valueOfTask = task.value;
 
     if(valueOfTask === '') {
@@ -18,6 +20,16 @@ addButton.addEventListener('click',(e) => {
     }
     task.value = ''
     saveData();
+}
+
+task.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter') {
+        addTask();
+    }
+})
+
+addButton.addEventListener('click',(e) => {
+    addTask();
 });
 
 taskList.addEventListener('click', (e) => {
@@ -25,7 +37,7 @@ taskList.addEventListener('click', (e) => {
         e.target.parentElement.remove();
         saveData();
     }
-})
+});
 
 function saveData() {
     localStorage.setItem("tasks", taskList.innerHTML);
@@ -33,4 +45,13 @@ function saveData() {
 function showSaveData() {
     taskList.innerHTML = localStorage.getItem("tasks");
 }
+
+clearHistoryButton.addEventListener('click', (e) => {
+    let container = e.target.parentElement;
+    let childElements = container.children[1].children[1].children;
+    Array.from(childElements).forEach(child => child.remove());
+
+    localStorage.clear();
+});
+
 showSaveData();
